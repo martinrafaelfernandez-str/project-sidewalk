@@ -1,16 +1,28 @@
-# React + Vite
+# Project SIDEWALK
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A community-based street and sidewalk obstruction reporting platform.
 
-Currently, two official plugins are available:
+## Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Project SIDEWALK aims to help communities document and monitor street and sidewalk issues, beginning with Muñoz / Roosevelt, Quezon City.
 
-## React Compiler
+## Planned Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Public incident reporting
+- Photo evidence submission
+- Location tagging
+- Community incident map
+- Report verification and moderation
+- Admin dashboard
+- Report status tracking
 
-## Expanding the Oxlint configuration
+## Technology Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+- React
+- Java Spring Boot
+- PostgreSQL
+- Leaflet / OpenStreetMap
+
+## Project Status
+
+Currently under development.
