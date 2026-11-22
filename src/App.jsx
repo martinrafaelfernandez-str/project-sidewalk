@@ -6,6 +6,7 @@ function App() {
   const [category, setCategory] = useState('')
   const [location, setLocation] = useState('')
   const [description, setDescription] = useState('')
+  const [evidence, setEvidence] = useState(null)
   const [submitted, setSubmitted] = useState(false)
 
   function handleSubmit(event) {
@@ -13,11 +14,12 @@ function App() {
 
     setSubmitted(true)
 
-    console.log({
-      category,
-      location,
-      description
-    })
+   console.log({
+    category,
+    location,
+    description,
+    evidence
+  })
   }
 
   return (
@@ -85,6 +87,7 @@ function App() {
                   }}
                 >
                   Submit Another Report
+                  setEvidence(null)
                 </button>
               </div>
             ) : (
@@ -154,9 +157,24 @@ function App() {
                 <input
                   id="evidence"
                   type="file"
-                  accept="image/*"
+                  accept="image/png, image/jpeg, image/webp"
+                  onChange={(event) => {
+                    const file = event.target.files[0]
+
+                    if (file && file.size > 5 * 1024 * 1024) {
+                      alert('Image must be 5 MB or smaller.')
+                      event.target.value = ''
+                      setEvidence(null)
+                      return
+                    }
+
+                    setEvidence(file || null)
+                  }}
                 />
 
+                {evidence && (
+                  <p>Selected photo: {evidence.name}</p>
+                )}
                 <button
                   type="submit"
                   className="primary-button"
