@@ -9,6 +9,46 @@ function App() {
   const [evidence, setEvidence] = useState(null)
   const [submitted, setSubmitted] = useState(false)
 
+  const [coordinates, setCoordinates] = useState(null)
+  const [locationLoading, setLocationLoading] = useState(false)
+
+  function getCurrentLocation() {
+  if (!navigator.geolocation) {
+    alert('Geolocation is not supported by your browser.')
+    return
+  }
+
+  setLocationLoading(true)
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const latitude = position.coords.latitude
+      const longitude = position.coords.longitude
+
+      setCoordinates({
+        latitude,
+        longitude
+      })
+
+      setLocation(
+        `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
+      )
+
+      setLocationLoading(false)
+    },
+    (error) => {
+      console.error(error)
+      alert('Unable to retrieve your location. Please enter it manually.')
+      setLocationLoading(false)
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
+  )
+}
+
   function handleSubmit(event) {
     event.preventDefault()
 
@@ -18,7 +58,8 @@ function App() {
     category,
     location,
     description,
-    evidence
+    evidence,
+    coordinates
   })
   }
 
@@ -84,10 +125,13 @@ function App() {
                     setLocation('')
                     setDescription('')
                     setSubmitted(false)
+                    setEvidence(null)
+                    setCoordinates(null)
+                    setLocationLoading(false)
                   }}
                 >
                   Submit Another Report
-                  setEvidence(null)
+                  
                 </button>
               </div>
             ) : (
@@ -119,6 +163,22 @@ function App() {
                     Road and Sidewalk Damage
                   </option>
                 </select>
+                  
+                  <button
+                    type="button"
+                    onClick={getCurrentLocation}
+                    disabled={locationLoading}
+                  >
+                    {locationLoading ? 'Getting location...' : 'Use My Current Location'}
+                  </button>
+               
+                  <button
+                    type="button"
+                    onClick={getCurrentLocation}
+                    disabled={locationLoading}
+                  >
+                    {locationLoading ? 'Getting location...' : 'Use My Current Location'}
+                  </button>
 
                 <label htmlFor="location">
                   Location
@@ -129,11 +189,19 @@ function App() {
                   type="text"
                   placeholder="Enter street, landmark, or address"
                   value={location}
-                  onChange={(event) =>
+                  onChange={(event) => {
                     setLocation(event.target.value)
-                  }
+                    setCoordinates(null)
+                  }}
                   required
                 />
+
+                {coordinates && (
+                  <p>
+                    GPS Coordinates: {coordinates.latitude.toFixed(6)},
+                    {coordinates.longitude.toFixed(6)}
+                  </p>
+                )}
 
                 <label htmlFor="description">
                   Description
@@ -172,9 +240,16 @@ function App() {
                   }}
                 />
 
-                {evidence && (
+               {evidence && (
+                <div className="evidence-preview">
                   <p>Selected photo: {evidence.name}</p>
-                )}
+
+                  <img
+                    src={URL.createObjectURL(evidence)}
+                    alt="Selected report evidence"
+                  />
+                </div>
+              )}
                 <button
                   type="submit"
                   className="primary-button"

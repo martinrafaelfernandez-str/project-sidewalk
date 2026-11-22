@@ -208,3 +208,17 @@ footer {
   }
 }
 
+.evidence-preview {
+  margin-top: 15px;
+}
+
+.evidence-preview img {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-top: 10px;
+  border: 1px solid #dce5dc;
+}
