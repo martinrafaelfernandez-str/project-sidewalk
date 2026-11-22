@@ -24,3 +24,17 @@ button,
 a {
   font: inherit;
 }
+
+.incident-map {
+  width: 100%;
+  margin-top: 30px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #dce5dc;
+}
+
+.incident-map .leaflet-container {
+  height: 450px;
+  width: 100%;
+  z-index: 1;
+}

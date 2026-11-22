@@ -1,6 +1,7 @@
 
 import { useState } from 'react'
 import './App.css'
+import IncidentMap from './components/IncidentMap'
 
 function App() {
   const [category, setCategory] = useState('')
@@ -271,9 +272,7 @@ function App() {
             obstructions around your community.
           </p>
 
-          <div className="map-placeholder">
-            <p>Interactive Map Coming Soon</p>
-          </div>
+          <IncidentMap />
         </section>
 
         <section className="about" id="about">
