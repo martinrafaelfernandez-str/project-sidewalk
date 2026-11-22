@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import './App.css'
 import IncidentMap from './components/IncidentMap'
+import LocationPicker from './components/LocationPicker'
 
 const initialReports = []
 
@@ -58,12 +59,22 @@ function App() {
   const [coordinates, setCoordinates] = useState(null)
   const [locationLoading, setLocationLoading] = useState(false)
   const [reports, setReports] = useState(initialReports)
+  const [showLocationPicker, setShowLocationPicker] = useState(false)
+
+  function handleMapLocationSelect(selectedCoordinates) {
+  setCoordinates(selectedCoordinates)
+
+  setLocation(
+    `${selectedCoordinates.latitude.toFixed(6)}, ${selectedCoordinates.longitude.toFixed(6)}`
+  )
+}
 
   function getCurrentLocation() {
   if (!navigator.geolocation) {
     alert('Geolocation is not supported by your browser.')
     return
   }
+
 
   setLocationLoading(true)
 
@@ -194,6 +205,7 @@ function App() {
                     setCategory('')
                     setLocation('')
                     setDescription('')
+                    setShowLocationPicker(false)
                     setSubmitted(false)
                     setEvidence(null)
                     setCoordinates(null)
@@ -201,6 +213,7 @@ function App() {
                   }}
                 >
                   Submit Another Report
+                  
                   
                 </button>
               </div>
@@ -241,8 +254,24 @@ function App() {
                   >
                     {locationLoading ? 'Getting location...' : 'Use My Current Location'}
                   </button>
-               
+                  
+                  <button
+                    type="button"
+                    onClick={() => setShowLocationPicker(!showLocationPicker)}
+                  >
+                    {showLocationPicker
+                      ? 'Close Map'
+                      : 'Select Location on Map'}
+                  </button>
                 <label htmlFor="location">
+                  
+                  {showLocationPicker && (
+                <LocationPicker
+                  selectedCoordinates={coordinates}
+                  onSelect={handleMapLocationSelect}
+                />
+              )}
+
                   Location
                 </label>
 
