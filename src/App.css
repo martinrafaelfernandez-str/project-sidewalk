@@ -237,3 +237,136 @@ footer {
   width: 100%;
   z-index: 1;
 }
+
+
+.incident-map-container {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.map-filters {
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.map-filters h3 {
+  margin-bottom: 12px;
+  color: #202820;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-button {
+  padding: 10px 16px;
+  border: 1px solid #dce5dc;
+  border-radius: 20px;
+  background: white;
+  color: #47534a;
+  font-size: 13px;
+  transition: 0.2s ease;
+}
+
+.filter-button:hover {
+  background: #edf5ee;
+  border-color: #236b48;
+}
+
+.filter-button.active {
+  background: #236b48;
+  color: white;
+  border-color: #236b48;
+}
+
+.report-count {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #657168;
+}
+
+.incident-map {
+  width: 100%;
+  height: 450px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #dce5dc;
+}
+
+.incident-map .leaflet-container {
+  height: 450px;
+  width: 100%;
+  z-index: 1;
+}
+
+@media (max-width: 600px) {
+  .filter-buttons {
+    gap: 8px;
+  }
+
+  .filter-button {
+    font-size: 12px;
+    padding: 9px 12px;
+  }
+}
+
+/* Custom incident markers */
+
+.category-marker {
+  background: transparent;
+  border: none;
+}
+
+.category-marker span {
+  display: flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid white;
+  border-radius: 50%;
+  font-size: 21px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Double parking */
+.marker-parking span {
+  background: #dc4444;
+}
+
+/* Sidewalk obstruction */
+.marker-sidewalk span {
+  background: #e99a32;
+}
+
+/* Unauthorized street occupation */
+.marker-occupation span {
+  background: #8955c7;
+}
+
+/* Road damage */
+.marker-damage span {
+  background: #3489ce;
+}
+
+/* Report details popup */
+
+.report-popup {
+  min-width: 210px;
+  max-width: 260px;
+}
+
+.report-popup h3 {
+  margin: 0 0 10px;
+  color: #236b48;
+  font-size: 15px;
+}
+
+.report-popup p {
+  margin: 7px 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #47534a;
+}
