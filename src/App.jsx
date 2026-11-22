@@ -3,6 +3,51 @@ import { useState } from 'react'
 import './App.css'
 import IncidentMap from './components/IncidentMap'
 
+const initialReports = []
+
+/*const initialReports = [
+  {
+    id: 1,
+    category: 'Sidewalk Obstruction',
+    location: 'Near Muñoz Market',
+    coordinates: [14.6575, 121.0205],
+    status: 'Under Review',
+    description: 'Objects are blocking part of the pedestrian walkway.',
+    date: 'November 22, 2026',
+    time: '9:30 AM'
+  },
+  {
+    id: 2,
+    category: 'Double Parking',
+    location: 'Near Roosevelt Avenue',
+    coordinates: [14.6570, 121.0215],
+    status: 'Submitted',
+    description: 'A vehicle is occupying part of the roadside.',
+    date: 'November 22, 2026',
+    time: '10:15 AM'
+  },
+  {
+    id: 3,
+    category: 'Road and Sidewalk Damage',
+    location: 'Near Congressional Avenue',
+    coordinates: [14.6585, 121.0195],
+    status: 'Verified',
+    description: 'Damaged pavement may make walking difficult.',
+    date: 'November 22, 2026',
+    time: '11:00 AM'
+  },
+  {
+    id: 4,
+    category: 'Unauthorized Street Occupation',
+    location: 'Near Muñoz Road',
+    coordinates: [14.6565, 121.0190],
+    status: 'Under Review',
+    description: 'A portion of the public walkway appears to be occupied.',
+    date: 'November 22, 2026',
+    time: '1:20 PM'
+  }
+]
+*/
 function App() {
   const [category, setCategory] = useState('')
   const [location, setLocation] = useState('')
@@ -12,6 +57,7 @@ function App() {
 
   const [coordinates, setCoordinates] = useState(null)
   const [locationLoading, setLocationLoading] = useState(false)
+  const [reports, setReports] = useState(initialReports)
 
   function getCurrentLocation() {
   if (!navigator.geolocation) {
@@ -51,18 +97,41 @@ function App() {
 }
 
   function handleSubmit(event) {
-    event.preventDefault()
+  event.preventDefault()
 
-    setSubmitted(true)
+  const now = new Date()
 
-   console.log({
+  const newReport = {
+    id: Date.now(),
     category,
     location,
     description,
-    evidence,
-    coordinates
-  })
+    coordinates: coordinates
+      ? [coordinates.latitude, coordinates.longitude]
+      : null,
+    status: 'Submitted',
+    date: now.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }),
+    time: now.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit'
+    }),
+    evidenceName: evidence ? evidence.name : null,
+    evidenceUrl: evidence ? URL.createObjectURL(evidence) : null
   }
+
+  setReports((previousReports) => [
+    newReport,
+    ...previousReports
+  ])
+
+  setSubmitted(true)
+
+  console.log('New report:', newReport)
+}
 
   return (
     <div className="app">
@@ -173,14 +242,6 @@ function App() {
                     {locationLoading ? 'Getting location...' : 'Use My Current Location'}
                   </button>
                
-                  <button
-                    type="button"
-                    onClick={getCurrentLocation}
-                    disabled={locationLoading}
-                  >
-                    {locationLoading ? 'Getting location...' : 'Use My Current Location'}
-                  </button>
-
                 <label htmlFor="location">
                   Location
                 </label>
@@ -272,7 +333,7 @@ function App() {
             obstructions around your community.
           </p>
 
-          <IncidentMap />
+          <IncidentMap reports={reports} />
         </section>
 
         <section className="about" id="about">

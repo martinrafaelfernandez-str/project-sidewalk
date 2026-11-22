@@ -39,49 +39,6 @@ const categoryIcons = {
   })
 }
 
-const sampleReports = [
-  {
-    id: 1,
-    category: 'Sidewalk Obstruction',
-    location: 'Near Muñoz Market',
-    coordinates: [14.6575, 121.0205],
-    status: 'Under Review',
-    description: 'Objects are blocking part of the pedestrian walkway.',
-    date: 'November 22, 2026',
-    time: '9:30 AM'
-  },
-  {
-    id: 2,
-    category: 'Double Parking',
-    location: 'Near Roosevelt Avenue',
-    coordinates: [14.6570, 121.0215],
-    status: 'Submitted',
-    description: 'A vehicle is occupying part of the roadside.',
-    date: 'November 22, 2026',
-    time: '10:15 AM'
-  },
-  {
-    id: 3,
-    category: 'Road and Sidewalk Damage',
-    location: 'Near Congressional Avenue',
-    coordinates: [14.6585, 121.0195],
-    status: 'Verified',
-    description: 'Damaged pavement may make walking difficult.',
-    date: 'November 22, 2026',
-    time: '11:00 AM'
-  },
-  {
-    id: 4,
-    category: 'Unauthorized Street Occupation',
-    location: 'Near Muñoz Road',
-    coordinates: [14.6565, 121.0190],
-    status: 'Under Review',
-    description: 'A portion of the public walkway appears to be occupied.',
-    date: 'November 22, 2026',
-    time: '1:20 PM'
-  }
-]
-
 const categories = [
   'All Reports',
   'Double Parking',
@@ -90,16 +47,24 @@ const categories = [
   'Road and Sidewalk Damage'
 ]
 
-function IncidentMap() {
+function IncidentMap({ reports }) {
   const [selectedCategory, setSelectedCategory] =
     useState('All Reports')
 
-  const filteredReports =
-    selectedCategory === 'All Reports'
-      ? sampleReports
-      : sampleReports.filter(
-          (report) => report.category === selectedCategory
-        )
+  const locatedReports = reports.filter(
+  (report) =>
+    Array.isArray(report.coordinates) &&
+    report.coordinates.length === 2
+)
+
+const filteredReports =
+  selectedCategory === 'All Reports'
+    ? locatedReports
+    : locatedReports.filter(
+        (report) => report.category === selectedCategory
+      )
+
+const unlocatedCount = reports.length - locatedReports.length
 
   return (
     <div className="incident-map-container">
@@ -125,10 +90,43 @@ function IncidentMap() {
         </div>
 
         <p className="report-count">
-          Showing {filteredReports.length} of {sampleReports.length} reports
-        </p>
-      </div>
+            Showing {filteredReports.length} map pins
+            ({reports.length} total reports)
+            </p>
 
+            {unlocatedCount > 0 && (
+            <p className="report-count">
+                {unlocatedCount} report(s) without map coordinates
+            </p>
+            )}
+      </div>
+    <div className="map-legend">
+    
+    <h3>Map Legend</h3>
+
+    <div className="legend-items">
+        <div className="legend-item">
+        <span className="legend-marker marker-parking">🚗</span>
+        <span>Double Parking</span>
+        </div>
+
+        <div className="legend-item">
+        <span className="legend-marker marker-sidewalk">🚧</span>
+        <span>Sidewalk Obstruction</span>
+        </div>
+
+        <div className="legend-item">
+        <span className="legend-marker marker-occupation">🏪</span>
+        <span>Unauthorized Street Occupation</span>
+        </div>
+
+        <div className="legend-item">
+        <span className="legend-marker marker-damage">⚠️</span>
+        <span>Road and Sidewalk Damage</span>
+        </div>
+    </div>
+    
+    </div>
       <div className="incident-map">
         <MapContainer
           center={[14.6575, 121.0205]}
@@ -156,9 +154,19 @@ function IncidentMap() {
 
                 <p>{report.description}</p>
 
-                <p>
-                <strong>Status:</strong> {report.status}
-                </p>
+            {report.evidenceUrl && (
+            <div className="popup-evidence">
+                <img
+                src={report.evidenceUrl}
+                alt="Incident evidence"
+                />
+                <p>{report.evidenceName}</p>
+            </div>
+            )}
+
+            <p>
+            <strong>Status:</strong> {report.status}
+            </p>
 
                 <p>
                 <strong>Reported:</strong> {report.date} at {report.time}
